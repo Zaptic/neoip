@@ -70,6 +70,7 @@ ip.fromLong(2130706433); // '127.0.0.1'
 This software is licensed under the MIT License.
 
 Copyright Fedor Indutny, 2012.
+Copyright Juliand Digital Ltd, and other contributors 2024.
 
 Permission is hereby granted, free of charge, to any person obtaining a
 copy of this software and associated documentation files (the
