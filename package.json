@@ -8,7 +8,7 @@
 	"homepage": "https://github.com/zaptic/neoip",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/zaptic/neoip.git"
+		"url": "git+https://github.com/zaptic/neoip.git"
 	},
 	"files": [
 		"lib",
