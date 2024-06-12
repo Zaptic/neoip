@@ -363,6 +363,25 @@ describe('IP library for node.js', () => {
     });
   });
 
+  describe('isPublic() method', () => {
+    it('should check if an address is localhost', () => {
+      assert.equal(ip.isPublic('127.0.0.1'), false);
+    });
+
+    // Common private networks
+    ['10.0.0.1', '192.168.1.1', '172.16.0.1', 'fd00::1'].forEach((address) => {
+      describe(address, () => {
+        it('should respond with false', () => {
+          assert.equal(ip.isPublic(address), false);
+        });
+      });
+    });
+
+    it('should reject bogus addresses', () => {
+      assert.equal(ip.isPublic('999.999.999.999'), false);
+    });
+  });
+
   describe('loopback() method', () => {
     describe('undefined', () => {
       it('should respond with 127.0.0.1', () => {
