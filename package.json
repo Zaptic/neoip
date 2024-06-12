@@ -1,17 +1,20 @@
 {
-	"name": "ip",
+	"name": "neoip",
 	"version": "2.0.1",
-	"author": "Fedor Indutny <fedor@indutny.com>",
-	"homepage": "https://github.com/indutny/node-ip",
+	"contributors": [
+		"Fedor Indutny <fedor@indutny.com>",
+		"Mike Hall <michael.hall@zaptic.com>"
+	],
+	"homepage": "https://github.com/zaptic/neoip",
 	"repository": {
 		"type": "git",
-		"url": "http://github.com/indutny/node-ip.git"
+		"url": "https://github.com/zaptic/neoip.git"
 	},
 	"files": [
 		"lib",
 		"README.md"
 	],
-	"main": "lib/ip",
+	"main": "lib/ip.js",
 	"devDependencies": {
 		"eslint": "^9.4.0",
 		"mocha": "^10.4.0",
