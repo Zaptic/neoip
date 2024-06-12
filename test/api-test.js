@@ -35,16 +35,14 @@ describe('IP library for node.js', () => {
       ip.toBuffer('::1', buf, offset);
       assert(/(00){15,15}01/.test(buf.toString('hex', offset, offset + 16)));
       assert.equal(ip.toString(buf, offset, 16), '::1');
-      assert.equal(ip.toString(
-        ip.toBuffer('1::', buf, offset),
-        offset,
-        16,
-      ), '1::');
-      assert.equal(ip.toString(
-        ip.toBuffer('abcd::dcba', buf, offset),
-        offset,
-        16,
-      ), 'abcd::dcba');
+      assert.equal(
+        ip.toString(ip.toBuffer('1::', buf, offset), offset, 16),
+        '1::',
+      );
+      assert.equal(
+        ip.toString(ip.toBuffer('abcd::dcba', buf, offset), offset, 16),
+        'abcd::dcba',
+      );
     });
 
     it('should convert to buffer IPv6 mapped IPv4 address', () => {
@@ -119,11 +117,11 @@ describe('IP library for node.js', () => {
       assert.equal(ipv4Subnet.networkAddress, '192.168.1.128');
     });
 
-    it('should compute ipv4 network\'s first address', () => {
+    it("should compute ipv4 network's first address", () => {
       assert.equal(ipv4Subnet.firstAddress, '192.168.1.129');
     });
 
-    it('should compute ipv4 network\'s last address', () => {
+    it("should compute ipv4 network's last address", () => {
       assert.equal(ipv4Subnet.lastAddress, '192.168.1.190');
     });
 
@@ -143,7 +141,7 @@ describe('IP library for node.js', () => {
       assert.equal(ipv4Subnet.subnetMask, '255.255.255.192');
     });
 
-    it('should compute ipv4 subnet mask\'s length', () => {
+    it("should compute ipv4 subnet mask's length", () => {
       assert.equal(ipv4Subnet.subnetMaskLength, 26);
     });
 
@@ -159,11 +157,11 @@ describe('IP library for node.js', () => {
   describe('subnet() method with mask length 32', () => {
     // Test cases calculated with http://www.subnet-calculator.com/
     const ipv4Subnet = ip.subnet('192.168.1.134', '255.255.255.255');
-    it('should compute ipv4 network\'s first address', () => {
+    it("should compute ipv4 network's first address", () => {
       assert.equal(ipv4Subnet.firstAddress, '192.168.1.134');
     });
 
-    it('should compute ipv4 network\'s last address', () => {
+    it("should compute ipv4 network's last address", () => {
       assert.equal(ipv4Subnet.lastAddress, '192.168.1.134');
     });
 
@@ -175,11 +173,11 @@ describe('IP library for node.js', () => {
   describe('subnet() method with mask length 31', () => {
     // Test cases calculated with http://www.subnet-calculator.com/
     const ipv4Subnet = ip.subnet('192.168.1.134', '255.255.255.254');
-    it('should compute ipv4 network\'s first address', () => {
+    it("should compute ipv4 network's first address", () => {
       assert.equal(ipv4Subnet.firstAddress, '192.168.1.134');
     });
 
-    it('should compute ipv4 network\'s last address', () => {
+    it("should compute ipv4 network's last address", () => {
       assert.equal(ipv4Subnet.lastAddress, '192.168.1.135');
     });
 
@@ -196,11 +194,11 @@ describe('IP library for node.js', () => {
       assert.equal(ipv4Subnet.networkAddress, '192.168.1.128');
     });
 
-    it('should compute an ipv4 network\'s first address', () => {
+    it("should compute an ipv4 network's first address", () => {
       assert.equal(ipv4Subnet.firstAddress, '192.168.1.129');
     });
 
-    it('should compute an ipv4 network\'s last address', () => {
+    it("should compute an ipv4 network's last address", () => {
       assert.equal(ipv4Subnet.lastAddress, '192.168.1.190');
     });
 
@@ -220,7 +218,7 @@ describe('IP library for node.js', () => {
       assert.equal(ipv4Subnet.subnetMask, '255.255.255.192');
     });
 
-    it('should compute an ipv4 subnet mask\'s length', () => {
+    it("should compute an ipv4 subnet mask's length", () => {
       assert.equal(ipv4Subnet.subnetMaskLength, 26);
     });
 
@@ -264,7 +262,6 @@ describe('IP library for node.js', () => {
     it('should correctly handle "127.0.1" as three parts', () => {
       assert.equal(ip.normalizeToLong('127.0.1'), 2130706433);
     });
-
 
     it('should correctly handle hexadecimal notation "0x7f.0x0.0x0.0x1"', () => {
       assert.equal(ip.normalizeToLong('0x7f.0x0.0x0.0x1'), 2130706433);
@@ -352,7 +349,7 @@ describe('IP library for node.js', () => {
       assert.equal(ip.isPrivate('fe80::1'), true);
     });
 
-    it('should correctly identify hexadecimal IP addresses like \'0x7f.1\' as private', () => {
+    it("should correctly identify hexadecimal IP addresses like '0x7f.1' as private", () => {
       assert.equal(ip.isPrivate('0x7f.1'), true);
     });
   });
