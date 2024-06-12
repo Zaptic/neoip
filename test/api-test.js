@@ -14,7 +14,7 @@ describe('IP library for node.js', () => {
     });
 
     it('should convert to buffer IPv4 address in-place', () => {
-      const buf = new Buffer(128);
+      const buf = Buffer.alloc(128);
       const offset = 64;
       ip.toBuffer('127.0.0.1', buf, offset);
       assert.equal(buf.toString('hex', offset, offset + 4), '7f000001');
@@ -30,7 +30,7 @@ describe('IP library for node.js', () => {
     });
 
     it('should convert to buffer IPv6 address in-place', () => {
-      const buf = new Buffer(128);
+      const buf = Buffer.alloc(128);
       const offset = 64;
       ip.toBuffer('::1', buf, offset);
       assert(/(00){15,15}01/.test(buf.toString('hex', offset, offset + 16)));
