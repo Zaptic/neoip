@@ -11,10 +11,10 @@
 		"url": "git+https://github.com/zaptic/neoip.git"
 	},
 	"files": [
-		"lib",
+		"src",
 		"README.md"
 	],
-	"main": "lib/ip.js",
+	"main": "src/ip.js",
 	"devDependencies": {
 		"eslint": "^9.4.0",
 		"mocha": "^10.4.0",
@@ -22,9 +22,9 @@
 		"prettier": "^3.3.2"
 	},
 	"scripts": {
-		"lint": "eslint lib/*.js test/*.js",
+		"lint": "eslint src/*.js test/*.js",
 		"test": "npm run lint && mocha --reporter spec test/*-test.js",
-		"fix": "prettier --write lib/*.js test/*.js"
+		"fix": "prettier --write src/*.js test/*.js"
 	},
 	"license": "MIT"
 }
