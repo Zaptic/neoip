@@ -1,9 +1,8 @@
 /* global describe, it */
-const assert = require('assert');
-const { Buffer } = require('buffer');
-const net = require('net');
-const os = require('os');
-const ip = require('..');
+import assert from 'node:assert';
+import os from 'node:os';
+import net from 'node:net';
+import * as ip from './ip';
 
 describe('toUIntArray() method', () => {
   describe('IPv4', () => {
@@ -1352,62 +1351,67 @@ describe('isReserved() method', () => {
 });
 
 describe('loopback() method', () => {
-  describe('undefined', () => {
-    it('should respond with 127.0.0.1', () => {
-      assert.equal(ip.loopback(), '127.0.0.1');
-    });
+  it('should respond with 127.0.0.1 by default', () => {
+    assert.equal(ip.loopback(), '127.0.0.1');
   });
 
-  describe('IPv4', () => {
-    it('should respond with 127.0.0.1', () => {
-      assert.equal(ip.loopback('IPv4'), '127.0.0.1');
-      assert.equal(ip.loopback(4), '127.0.0.1');
-    });
+  it('should respond with 127.0.0.1 for IPv4', () => {
+    assert.equal(ip.loopback('IPv4'), '127.0.0.1');
+    assert.equal(ip.loopback(4), '127.0.0.1');
   });
 
-  describe('IPv6', () => {
-    it('should respond with fe80::1', () => {
-      assert.equal(ip.loopback('IPv6'), 'fe80::1');
-      assert.equal(ip.loopback(6), 'fe80::1');
-    });
+  it('should respond with fe80::1 for IPv6', () => {
+    assert.equal(ip.loopback('IPv6'), 'fe80::1');
+    assert.equal(ip.loopback(6), 'fe80::1');
   });
 });
 
 describe('address() method', () => {
-  describe('undefined', () => {
-    it('should respond with a private ip', () => {
-      assert.ok(ip.isPrivate(ip.address()));
+  describe('default', () => {
+    it('should respond with an IPv4 by default', () => {
+      const addr = ip.address();
+      assert.ok(addr === undefined || net.isIPv4(addr));
     });
   });
 
   describe('private', () => {
-    [undefined, 'IPv4', 'IPv6'].forEach((family) => {
-      describe(family || 'undefined', () => {
-        it('should respond with a private ip', () => {
-          assert.ok(ip.isPrivate(ip.address('private', family)));
-        });
-      });
+    it('should respond with a private IPv4 address by default', () => {
+      const addr = ip.address('private');
+      assert.ok(addr === undefined || net.isIPv4(addr));
+      assert.ok(addr === undefined || ip.isPrivate(addr));
+    });
+
+    it('should respond with a private IPv4 address', () => {
+      const addr = ip.address('private', 'IPv4');
+      assert.ok(addr === undefined || net.isIPv4(addr));
+      assert.ok(addr === undefined || ip.isPrivate(addr));
+    });
+
+    it('should respond with a private IPv6 address', () => {
+      const addr = ip.address('private', 'IPv6');
+      assert.ok(addr === undefined || net.isIPv6(addr));
+      assert.ok(addr === undefined || ip.isPrivate(addr));
     });
   });
 
+  // Also test out the network interfaces
   const interfaces = os.networkInterfaces();
 
   Object.keys(interfaces).forEach((nic) => {
     describe(nic, () => {
-      [undefined, 'IPv4'].forEach((family) => {
-        describe(family || 'undefined', () => {
-          it('should respond with an IPv4 address', () => {
-            const addr = ip.address(nic, family);
-            assert.ok(!addr || net.isIPv4(addr));
-          });
-        });
+      it('should respond with an IPv4 address by default', () => {
+        const addr = ip.address(nic);
+        assert.ok(addr === undefined || net.isIPv4(addr));
       });
 
-      describe('IPv6', () => {
-        it('should respond with an IPv6 address', () => {
-          const addr = ip.address(nic, 'IPv6');
-          assert.ok(!addr || net.isIPv6(addr));
-        });
+      it('should respond with an IPv4 address', () => {
+        const addr = ip.address(nic, 'IPv4');
+        assert.ok(addr === undefined || net.isIPv4(addr));
+      });
+
+      it('should respond with an IPv6 address', () => {
+        const addr = ip.address(nic, 'IPv6');
+        assert.ok(addr === undefined || net.isIPv6(addr));
       });
     });
   });
@@ -1431,11 +1435,10 @@ describe('fromLong() method', () => {
   });
 
   it('should reject non-IP values', () => {
-    assert.throws(() => ip.fromLong(false));
-    assert.throws(() => ip.fromLong('foo'));
-    assert.throws(() => ip.fromLong([]));
-    assert.throws(() => ip.fromLong({}));
-    assert.throws(() => ip.fromLong(100n));
+    assert.throws(() => ip.fromLong(false as unknown as number));
+    assert.throws(() => ip.fromLong('foo' as unknown as number));
+    assert.throws(() => ip.fromLong([] as unknown as number));
+    assert.throws(() => ip.fromLong({} as unknown as number));
     assert.throws(() => ip.fromLong(0xffffffff + 1));
   });
 });

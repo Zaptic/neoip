@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "target": "es2015",
+    "module": "esnext",
+    "lib": [],
+    "declaration": true,
+    "outDir": "dist",
+    "rootDir": "src",
+    "removeComments": true,
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "noImplicitThis": true,
+    "alwaysStrict": true,
+    "noFallthroughCasesInSwitch": true,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "allowUnreachableCode": true,
+    "skipLibCheck": true
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "src/**/*.test.ts"]
+}
