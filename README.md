@@ -1,7 +1,19 @@
 # NeoIP
 
 IP address utilities for node.js, forked from `indutny/node-ip`.
-Should be usable as a drop-in replacement.
+
+## Version 2.x
+
+Version 2.x aims to be API compatible with `indutny/node-ip`. If you need
+strict compatibility with the original version use the latest 2.x version.
+
+## Version 3.x
+
+Version 3.x has a very similar API, but has been refactored internally to remove
+edge cases introduced by atypical IP address formats. If you're starting a new
+project, or are willing to do some minor remedial work, use the latest 3.x.
+
+3.x exports versions for ESM and for CommonJS.
 
 ## Installation
 
@@ -22,7 +34,8 @@ git clone https://github.com/zaptic/neoip.git
 Get your ip address, compare ip addresses, validate ip addresses, etc.
 
 ```js
-const ip = require('neoip');
+import * as ip from 'neoip';
+// Or const ip = require("ip");
 
 ip.address(); // my ip address
 ip.isEqual('::1', '::0:1'); // true
@@ -54,8 +67,9 @@ ip.subnet('192.168.1.134', '255.255.255.192');
 //   numHosts: 62,
 //   length: 64,
 //   contains: function(addr){...} }
+
+// This is equivalent to the above
 ip.cidrSubnet('192.168.1.134/26');
-// Same as previous.
 
 // range checking
 ip.cidrSubnet('192.168.1.134/26').contains('192.168.1.190'); // true
