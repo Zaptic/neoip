@@ -6,7 +6,7 @@ import net from 'node:net';
  * Returns true if the string looks like a number in octal format.
  * @param byte The byte to test.
  */
-const isOctal = (byte: string | number) => {
+const isOctal = (byte: unknown) => {
   const str = String(byte);
   return str.startsWith('0') && /^[0-7]+$/.test(str);
 };
@@ -92,7 +92,7 @@ const compressv6 = (words: string[]) => {
     return '::';
   }
 
-  // If the longest sequence is more than one zeros, then replace it with ''
+  // If the longest sequence is more than one zero, then replace it with ''
   // Once joined with ':', the longest sequence will be '::'
   if (longestZeroSequence.length > 1 && longestZeroSequence.start !== null) {
     words.splice(longestZeroSequence.start, longestZeroSequence.length, '');
@@ -182,7 +182,7 @@ const v6toUInt8Array = (addr: string) => {
     throw new Error('invalid ip address');
   }
 
-  // Anything not a string  is invalid
+  // Anything not a string is invalid
   if (typeof addr !== 'string') {
     throw new Error('invalid ip address');
   }
@@ -208,7 +208,7 @@ const v6toUInt8Array = (addr: string) => {
     const rightWords = parseWords(right);
 
     if (leftWords.length + rightWords.length > SIXTEEN_BYTES) {
-      throw new Error('invalid ip address 3');
+      throw new Error('invalid ip address');
     }
 
     const padding = Array(SIXTEEN_BYTES).fill(0);
@@ -935,9 +935,9 @@ export const isPrivate = (addr: string | number) => {
 /**
  * Test if an IP address is a public address
  * ```js
- * isPrivate('127.0.0.1'); // fakse, loopback is private
- * isPrivate('192.168.0.1'); // fakse, private network
- * isPrivate('169.254.2.3'); // fakse, link-local is private
+ * isPrivate('127.0.0.1'); // false, loopback is private
+ * isPrivate('192.168.0.1'); // false, private network
+ * isPrivate('169.254.2.3'); // false, link-local is private
  * isPrivate('8.8.8.8'); // true, google is public
  * isPrivate('foo'); // false, invalid address
  * ```
