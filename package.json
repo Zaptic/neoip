@@ -30,7 +30,8 @@
 	"exports": {
 		".": {
 			"import": "./dist/ip.mjs",
-			"require": "./dist/ip.cjs"
+			"require": "./dist/ip.cjs",
+            "types": "./dist/ip.d.ts"
 		}
 	},
 	"devDependencies": {
