@@ -35,7 +35,7 @@ Get your ip address, compare ip addresses, validate ip addresses, etc.
 
 ```js
 import * as ip from 'neoip';
-// Or const ip = require("ip");
+// Or const ip = require("neoip");
 
 ip.address(); // my ip address
 ip.isEqual('::1', '::0:1'); // true

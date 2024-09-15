@@ -1,6 +1,6 @@
 {
 	"name": "neoip",
-	"version": "3.0.0",
+	"version": "3.0.1",
 	"contributors": [
 		"Fedor Indutny <fedor@indutny.com>",
 		"Mike Hall <michael.hall@zaptic.com>"
@@ -30,7 +30,8 @@
 	"exports": {
 		".": {
 			"import": "./dist/ip.mjs",
-			"require": "./dist/ip.cjs"
+			"require": "./dist/ip.cjs",
+			"types": "./dist/ip.d.ts"
 		}
 	},
 	"devDependencies": {
