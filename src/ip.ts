@@ -1,4 +1,3 @@
-import { Buffer } from 'node:buffer';
 import os from 'node:os';
 import net from 'node:net';
 
@@ -314,85 +313,16 @@ export const toUInt8Array = (addr: string | number) => {
 };
 
 /**
- * Convert an IP address to a node Buffer.
- * ```js
- * toBuffer('127.0.0.1') // <Buffer 7f 00 00 01>
- * toBuffer('::1') // <Buffer 00 00 00 00 00 00 00 01>
- * toBuffer('foo') // throws
- * toBuffer('127.0.0.1', Buffer.alloc(6), 1) // <Buffer 00 7f 00 00 01 00>
- * ```
- * @param addr The address to convert
- * @param buf An optional buffer to write the address to
- * @param offset The offset within the buffer to write to
- * @throws {Error} If the address is invalid
- */
-export const toBuffer = (
-  addr: string | number,
-  buf?: Buffer,
-  offset?: number,
-) => {
-  offset = ~~Number(offset);
-
-  const bytes = toUInt8Array(addr);
-  const result = buf || Buffer.alloc(offset + bytes.length);
-  bytes.forEach((byte, index) => (result[offset + index] = byte));
-
-  return result;
-};
-
-/**
- * Convert a Buffer into an IP string representation
- * ```js
- * bufferToString(Buffer.from([127, 0, 0, 1])) // 127.0.0.1
- * bufferToString(Buffer.from([0, 0, 0, 0, 0, 0, 0, 1])) // ::1
- * ```
- * @param buf The buffer to convert
- * @param offset The offset within the buffer to start reading
- * @param length The number of bytes to read
- * @throws {Error} If the buffer is not a valid IP byte array
- */
-const bufferToString = (buf: Buffer, offset?: number, length?: number) => {
-  offset = ~~Number(offset);
-  length = length || buf.length - offset;
-
-  if (length === 4) {
-    return buf.subarray(offset, offset + length).join('.');
-  }
-
-  if (length === 16) {
-    const words: string[] = [];
-    for (let i = 0; i < length; i += 2) {
-      const int16 = buf.readUInt16BE(offset + i);
-      words.push(int16.toString(16));
-    }
-
-    return compressv6(words);
-  }
-
-  throw new Error('invalid ip address');
-};
-
-/**
  * Converts a byte array into an IP string representation
  * ```js
  * toString(new Uint8Array([127, 0, 0, 1])) // 127.0.0.1
  * toString(new Uint8Array([0, 0, 0, 0, 0, 0, 0, 1])) // ::1
  * ```
  * @param bytes The byte array to convert
- * @param offset The offset within the buffer to start reading (buffer only)
- * @param length The number of bytes to read (buffer only)
  */
-export const toString = (
-  bytes: Uint8Array | Buffer,
-  offset?: number,
-  length?: number,
-) => {
-  if (Buffer.isBuffer(bytes)) {
-    return bufferToString(bytes, offset, length);
-  }
-
+export const toString = (bytes: Uint8Array) => {
   if (bytes instanceof Uint8Array === false) {
-    throw new Error('argument must be Buffer or a Uint8Array');
+    throw new Error('argument must be a Uint8Array');
   }
 
   if (bytes.length === 4) {
