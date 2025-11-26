@@ -695,6 +695,11 @@ describe('isPrivate() method', () => {
       assert.equal(ip.isPrivate('01200034567'), true);
     });
 
+    it('should handle irregular address "017700000001"', () => {
+      // 127.0.0.1
+      assert.equal(ip.isPrivate('017700000001'), true);
+    });
+
     it('should handle irregular address "012.1.2.3"', () => {
       // 10.1.2.3
       assert.equal(ip.isPrivate('012.1.2.3'), true);
@@ -753,6 +758,10 @@ describe('isPublic() method', () => {
 
     it('should say "8.8.8.8" is public', () => {
       assert.equal(ip.isPublic('8.8.8.8'), true);
+    });
+
+    it('should say "017700000001" is not public', () => {
+      assert.equal(ip.isPublic('017700000001'), false);
     });
 
     it('should say bogus ipv4 is not public', () => {
