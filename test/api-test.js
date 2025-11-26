@@ -354,6 +354,7 @@ describe('IP library for node.js', () => {
       '0300.0XA8.3', // 192.168.0.3
       '01200034567', // 10.0.57.119
       '012.1.2.3', // 10.1.2.3
+      '017700000001', // 127.0.0.1
     ].forEach((address) => {
       describe(address, () => {
         it('should respond with true', () => {
@@ -369,7 +370,13 @@ describe('IP library for node.js', () => {
     });
 
     // Common private networks
-    ['10.0.0.1', '192.168.1.1', '172.16.0.1', 'fd00::1'].forEach((address) => {
+    [
+      '10.0.0.1',
+      '192.168.1.1',
+      '172.16.0.1',
+      'fd00::1',
+      '017700000001', // 127.0.0.1 in octal
+    ].forEach((address) => {
       describe(address, () => {
         it('should respond with false', () => {
           assert.equal(ip.isPublic(address), false);
