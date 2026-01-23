@@ -1429,9 +1429,14 @@ describe('toLong() method', () => {
 });
 
 describe('fromLong() method', () => {
-  it('should repond with IPv4 address', () => {
+  it('should respond with IPv4 address', () => {
     assert.equal(ip.fromLong(0x7f000001), '127.0.0.1');
     assert.equal(ip.fromLong(0xffffffff), '255.255.255.255');
+  });
+
+  it('should reject out of bounds values', () => {
+    assert.throws(() => ip.fromLong(-1));
+    assert.throws(() => ip.fromLong(0xffffffff + 1));
   });
 
   it('should reject non-IP values', () => {
@@ -1439,7 +1444,54 @@ describe('fromLong() method', () => {
     assert.throws(() => ip.fromLong('foo' as unknown as number));
     assert.throws(() => ip.fromLong([] as unknown as number));
     assert.throws(() => ip.fromLong({} as unknown as number));
-    assert.throws(() => ip.fromLong(0xffffffff + 1));
+  });
+});
+
+describe('toBigInt() method', () => {
+  it('should respond with bigint values', () => {
+    assert.equal(ip.toBigInt('127.0.0.1'), 2130706433n);
+    assert.equal(ip.toBigInt('255.255.255.255'), 0xffffffffn);
+  });
+
+  it('should handle ipv6 addresses', () => {
+    assert.equal(ip.toBigInt('::1'), 1n);
+    assert.equal(ip.toBigInt('fd00::1'), 0xfd000000000000000000000000000001n);
+  });
+});
+
+describe('fromBigInt() method', () => {
+  it('should handle ipv4 addresses', () => {
+    assert.equal(ip.fromBigInt(2130706433n, 'ipv4'), '127.0.0.1');
+  });
+
+  it('should handle ipv6 addresses', () => {
+    assert.equal(
+      ip.fromBigInt(0xfd000000000000000000000000000001n, 'ipv6'),
+      'fd00::1',
+    );
+  });
+
+  it('should handle ipv6 addresses with leading zeros', () => {
+    assert.equal(ip.fromBigInt(1n, 'ipv6'), '::1');
+  });
+
+  it('should default to ipv6', () => {
+    assert.equal(ip.fromBigInt(1n), '::1');
+  });
+
+  it('should reject out of bounds values', () => {
+    assert.throws(() => ip.fromBigInt(-1n));
+    assert.throws(() => ip.fromBigInt(0xffffffffn + 1n, 'ipv4'));
+    assert.throws(() =>
+      ip.fromBigInt(0xffffffffffffffffffffffffffffffffn + 1n, 'ipv6'),
+    );
+  });
+
+  it('should reject non-IP values', () => {
+    assert.throws(() => ip.fromBigInt(false as unknown as bigint));
+    assert.throws(() => ip.fromBigInt('foo' as unknown as bigint));
+    assert.throws(() => ip.fromBigInt([] as unknown as bigint));
+    assert.throws(() => ip.fromBigInt({} as unknown as bigint));
   });
 });
 

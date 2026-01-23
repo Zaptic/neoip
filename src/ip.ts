@@ -1058,7 +1058,7 @@ export const address = (
 export const toLong = (addr: string) => {
   const bytes = toUInt8Array(addr);
   if (bytes.length !== 4) {
-    throw new Error('invalid ip address');
+    throw new Error('invalid ipv4 address');
   }
   return bytes.reduce((acc, byte) => acc * 256 + byte, 0);
 };
@@ -1076,6 +1076,60 @@ export const fromLong = (int32: number) => {
     throw new Error('invalid long value');
   }
   return `${int32 >>> 24}.${(int32 >> 16) & 255}.${(int32 >> 8) & 255}.${int32 & 255}`;
+};
+
+/**
+ * Convert an IP address to a bigint
+ * ```js
+ * toBigInt('127.0.0.1'); // 2130706433n
+ * toBigInt('fd00::1'); // 336294682933583715844663186250927177729n
+ * ```
+ * @param addr The ip address to convert
+ * @throws {Error} If the address is invalid
+ */
+export const toBigInt = (addr: string) => {
+  const bytes = toUInt8Array(addr);
+  if (bytes.length !== 16 && bytes.length !== 4) {
+    throw new Error('invalid ip address');
+  }
+  return bytes.reduce((acc, byte) => acc * 256n + BigInt(byte), 0n);
+};
+
+/**
+ * Convert a 128-bit bigint to an IP address
+ * ```js
+ * fromBigInt(336294682933583715844663186250927177729n); // fd00::1
+ * fromBigInt(2130706433n); // 127.0.0.1
+ * ```
+ * @param int128 The bigint to convert
+ * @param family The IP family to use, defaults to ipv6
+ * @throws {Error} If the value is invalid
+ */
+export const fromBigInt = (int128: bigint, family: Family = 'ipv6') => {
+  family = normalizeFamily(family);
+  if (family !== 'ipv4' && family !== 'ipv6') {
+    throw new Error('family must be ipv4 or ipv6');
+  }
+
+  // For IPv4, we can use the existing fromLong function
+  if (family === 'ipv4') {
+    return fromLong(Number(int128));
+  }
+
+  // Otherwise, validate the bigint is in range for IPv6
+  if (int128 < 0n || int128 > 0xffffffffffffffffffffffffffffffffn) {
+    throw new Error('invalid bigint value');
+  }
+
+  const bytes = new Uint8Array(16);
+
+  let value = int128;
+  for (let i = 15; i >= 0; i -= 1) {
+    bytes[i] = Number(value & 0xffn);
+    value = value >> 8n;
+  }
+
+  return toString(bytes);
 };
 
 /**
